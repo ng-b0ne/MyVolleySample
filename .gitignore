@@ -1,0 +1,16 @@
+.classpath
+.project
+.settings
+bin
+gen
+project.properties
+local.properties
+proguard
+.class
+
+.gradle
+build
+*.iml
+*.ipr
+*.iws
+.idea/
