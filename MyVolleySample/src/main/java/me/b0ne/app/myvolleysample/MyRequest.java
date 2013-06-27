@@ -1,5 +1,7 @@
 package me.b0ne.app.myvolleysample;
 
+import android.util.Log;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -25,7 +27,6 @@ public class MyRequest extends Request<JSONObject> {
 
     /**
      * リークエストのパラメーターを設定する
-     *
      * @param map
      */
     public void setParams(Map<String, String> map) {
@@ -40,10 +41,12 @@ public class MyRequest extends Request<JSONObject> {
     @Override
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse networkResponse) {
         String resp = new String(networkResponse.data);
+        // JSONObject型のレスポンス
         JSONObject resultJson;
         try {
             resultJson = new JSONObject(resp);
         } catch (Exception e) {
+            Log.e("ERROR", e.getMessage());
             return null;
         }
         return Response.success(resultJson, getCacheEntry());

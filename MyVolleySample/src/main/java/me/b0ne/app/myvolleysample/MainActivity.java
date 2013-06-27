@@ -27,19 +27,26 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mQueue = Volley.newRequestQueue(getApplicationContext());
-        String url = "";
+        String url = "http://www.mywebsite.com/sample.php";
+        // 送信したいパラメーター
         Map<String, String> params = new HashMap<String, String>();
         params.put("name", "Bone");
         params.put("sex", "male");
+        // リクエストの初期設定
         MyRequest myRequest = new MyRequest(Method.POST, url, myListener, myErrorListener);
+        // リクエストのタイムアウトなどの設定
         myRequest.setRetryPolicy(new DefaultRetryPolicy(
                 10000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         myRequest.setParams(params);
+        // リクエストキューにリクエスト追加
         mQueue.add(myRequest);
     }
 
+    /**
+     * レスポンス受信のリスナー
+     */
     private Listener<JSONObject> myListener = new Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
@@ -47,6 +54,9 @@ public class MainActivity extends Activity {
         }
     };
 
+    /**
+     * リクエストエラーのリスナー
+     */
     private ErrorListener myErrorListener = new ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
