@@ -20,6 +20,7 @@ import java.util.Map;
 
 public class MainActivity extends Activity {
     private static RequestQueue mQueue;
+    private static String REQUEST_URL = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,15 +28,26 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mQueue = Volley.newRequestQueue(getApplicationContext());
-        String url = "";
+        //testPost();
+
+
+    }
+
+    private void testPostImage(){
+
+    }
+
+    private void testPost() {
         Map<String, String> params = new HashMap<String, String>();
         params.put("name", "Bone");
         params.put("sex", "male");
-        MyRequest myRequest = new MyRequest(Method.POST, url, myListener, myErrorListener);
+        MyRequest myRequest = new MyRequest(Method.POST, REQUEST_URL, myListener, myErrorListener);
+
+        // timeout の設定
         myRequest.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            10000,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         myRequest.setParams(params);
         mQueue.add(myRequest);
     }
