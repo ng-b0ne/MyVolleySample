@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class MainActivity extends Activity {
     private static RequestQueue mQueue;
-    private static String REQUEST_URL = "";
+    private static String REQUEST_URL = "http://www.mywebsite.com/sample.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,6 @@ public class MainActivity extends Activity {
         mQueue = Volley.newRequestQueue(getApplicationContext());
         //testPost();
 
-
     }
 
     private void testPostImage(){
@@ -38,20 +37,25 @@ public class MainActivity extends Activity {
     }
 
     private void testPost() {
+        // 送信したいパラメーター
         Map<String, String> params = new HashMap<String, String>();
         params.put("name", "Bone");
         params.put("sex", "male");
+        // リクエストの初期設定
         MyRequest myRequest = new MyRequest(Method.POST, REQUEST_URL, myListener, myErrorListener);
-
-        // timeout の設定
+        // リクエストのタイムアウトなどの設定
         myRequest.setRetryPolicy(new DefaultRetryPolicy(
             10000,
             DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         myRequest.setParams(params);
+        // リクエストキューにリクエスト追加
         mQueue.add(myRequest);
     }
 
+    /**
+     * レスポンス受信のリスナー
+     */
     private Listener<JSONObject> myListener = new Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
@@ -59,6 +63,9 @@ public class MainActivity extends Activity {
         }
     };
 
+    /**
+     * リクエストエラーのリスナー
+     */
     private ErrorListener myErrorListener = new ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
