@@ -2,41 +2,53 @@ package me.b0ne.app.myvolleysample;
 
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
+import com.android.volley.Response.ErrorListener;
 
+import org.apache.http.entity.mime.MultipartEntity;
 import org.json.JSONObject;
 
-import java.util.Map;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
- * Created by bone on 13/06/25.
+ * Created by bone on 13/07/16.
  */
-public class MyRequest extends Request<JSONObject> {
+public class MyImageRequest extends Request<JSONObject> {
     private final Listener<JSONObject> mListener;
-    private Map<String, String> mParams;
+    private MultipartEntity mEntity;
 
-
-    public MyRequest(int method, String url, Listener<JSONObject> listener,
-                     ErrorListener errorListener) {
-        super(method, url, errorListener);
+    public MyImageRequest(String url, Listener<JSONObject> listener, ErrorListener errorListener) {
+        super(Method.POST, url, errorListener);
         mListener = listener;
     }
 
     /**
      * リークエストのパラメーターを設定する
-     * @param map
+     * @param entity
      */
-    public void setParams(Map<String, String> map) {
-        mParams = map;
+    public void setParams(MultipartEntity entity) {
+        mEntity = entity;
     }
 
     @Override
-    protected Map<String, String> getParams() {
-        return mParams;
+    public String getBodyContentType() {
+        return mEntity.getContentType().getValue();
+    }
+
+    @Override
+    public byte[] getBody() throws AuthFailureError {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            mEntity.writeTo(bos);
+        } catch (IOException e) {
+            Log.e("ERROR", e.getMessage());
+        }
+        return bos.toByteArray();
     }
 
     @Override

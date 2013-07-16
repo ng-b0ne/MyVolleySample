@@ -3,6 +3,7 @@ apply plugin: 'android'
 dependencies {
     compile files('libs/android-support-v4.jar')
     compile files('libs/httpmime-4.2.5.jar')
+    compile files('libs/apache-mime4j-core-0.7.2.jar')
     compile project(':libraries:volley')
 }
 
